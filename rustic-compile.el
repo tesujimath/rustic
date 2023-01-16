@@ -286,6 +286,9 @@ ARGS is a plist that affects how the process is run.
   (rustic--inheritenv
    (let* ((buf (get-buffer-create
                 (or (plist-get args :buffer) rustic-compilation-buffer-name)))
+          ;; opportunistically create the errno buffer so it has the right environment
+          ;; otherwise explain fails to find rustc
+          (errno-buf (get-buffer-create "*rust errno*"))
           (process (or (plist-get args :process) rustic-compilation-process-name))
           (mode (or (plist-get args :mode) 'rustic-compilation-mode))
           (directory (or (plist-get args :directory) (funcall rustic-compile-directory-method)))
